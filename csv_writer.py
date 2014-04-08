@@ -47,10 +47,10 @@ csvWriter.writerow(['0.000','Start'])
 csvWriter.writerow([itemsForFile[-1][0],'Finish'])
 csvWriter.writerow([])
 
-tactileDataType = 'takkPSI' 
+tactileDataType = 'takknumber' 
 temp = ['Time [s]']
-print itemsForFile[0]
-for i, item in enumerate(itemsForFile[0]):
+for i, item in enumerate(itemsForFile[0][1:]):
     temp.append('Elem%d [%s]' % (i, tactileDataType))
+csvWriter.writerow(temp)
 for item in itemsForFile:
     csvWriter.writerow(item)
