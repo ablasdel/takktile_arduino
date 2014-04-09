@@ -27,6 +27,7 @@ except:
     sys.exit()
 
 try:
+    print("Capturing Takktile Data ctrl^C to stop")
     while not failed:
         data = arduino.readline()
         if data:
@@ -34,23 +35,17 @@ try:
                 if starttime is None:
                     starttime = time.time()
                 currentTime = ['%.3f' %(time.time() - starttime)]
-                values =  currentTime + [float(j) for j in data.translate(None, ' []').split(",") if len(j) > 2]
-                print values
+                values =  currentTime + [j for j in data.translate(None, ' []\r\n').split(",")]
                 itemsForFile.append(values)
             except ValueError:
-                print ("invalid data ignored:", data)
+                print ("invalid data line ignored:", data)
 except KeyboardInterrupt:
     print("Writing File...")
 
-csvWriter.writerow(['Time [s]','Data Marker'])
-csvWriter.writerow(['0.000','Start'])
-csvWriter.writerow([itemsForFile[-1][0],'Finish'])
-csvWriter.writerow([])
-
 tactileDataType = 'takknumber' 
-temp = ['Time [s]']
+header = ['Time [s]']
 for i, item in enumerate(itemsForFile[0][1:]):
-    temp.append('Elem%d [%s]' % (i, tactileDataType))
-csvWriter.writerow(temp)
+    header.append('Elem%d [%s]' % (i, tactileDataType))
+csvWriter.writerow(header)
 for item in itemsForFile:
     csvWriter.writerow(item)
